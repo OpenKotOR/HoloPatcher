@@ -1,0 +1,16 @@
+LICENSE.txt
+README.md
+pyproject.toml
+setup.py
+src/holopatcher/__init__.py
+src/holopatcher/__main__.py
+src/holopatcher/app.py
+src/holopatcher/cli.py
+src/holopatcher/config.py
+src/holopatcher/core.py
+src/holopatcher.egg-info/PKG-INFO
+src/holopatcher.egg-info/SOURCES.txt
+src/holopatcher.egg-info/dependency_links.txt
+src/holopatcher.egg-info/entry_points.txt
+src/holopatcher.egg-info/requires.txt
+src/holopatcher.egg-info/top_level.txt

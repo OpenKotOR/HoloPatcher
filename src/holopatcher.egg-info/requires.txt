@@ -1,0 +1,1 @@
+pykotor[encodings,updater]>=2.3.1

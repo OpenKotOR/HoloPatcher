@@ -1,0 +1,2 @@
+[console_scripts]
+holopatcher = holopatcher.__main__:main
