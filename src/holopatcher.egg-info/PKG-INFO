@@ -32,7 +32,7 @@ Classifier: Environment :: X11 Applications :: Qt
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: pykotor[encodings,updater]>=2.3.1
+Requires-Dist: pykotor[encodings,updater]>=2.3.2
 
 # PyKotor TSLPatcher
 
