@@ -52,10 +52,10 @@ holopatcher = "holopatcher.__main__:main"
 
 [project.urls]
 Homepage = "https://deadlystream.com/files/file/2243-holopatcher/"
-Documentation = "https://github.com/OldRepublicDevs/PyKotor/wiki/Installing-Mods-with-HoloPatcher"
-Repository = "https://github.com/OldRepublicDevs/PyKotor.git"
-Issues = "https://github.com/OldRepublicDevs/PyKotor/issues"
-Changelog = "https://github.com/OldRepublicDevs/PyKotor/releases"
+Documentation = "https://github.com/OpenKotOR/PyKotor/wiki/Installing-Mods-with-HoloPatcher"
+Repository = "https://github.com/OpenKotOR/PyKotor.git"
+Issues = "https://github.com/OpenKotOR/PyKotor/issues"
+Changelog = "https://github.com/OpenKotOR/PyKotor/releases"
 
 # Poetry configuration
 [tool.poetry]
@@ -91,10 +91,10 @@ holopatcher = "holopatcher.__main__:main"
 
 [tool.poetry.urls]
 Homepage = "https://deadlystream.com/files/file/2243-holopatcher/"
-Documentation = "https://github.com/OldRepublicDevs/PyKotor/wiki/Installing-Mods-with-HoloPatcher"
-Repository = "https://github.com/OldRepublicDevs/PyKotor.git"
-Issues = "https://github.com/OldRepublicDevs/PyKotor/issues"
-Changelog = "https://github.com/OldRepublicDevs/PyKotor/releases"
+Documentation = "https://github.com/OpenKotOR/PyKotor/wiki/Installing-Mods-with-HoloPatcher"
+Repository = "https://github.com/OpenKotOR/PyKotor.git"
+Issues = "https://github.com/OpenKotOR/PyKotor/issues"
+Changelog = "https://github.com/OpenKotOR/PyKotor/releases"
 
 [tool.setuptools]
 package-dir = { "" = "src" }
