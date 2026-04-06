@@ -83,7 +83,11 @@ class InstallResult:
 
 def is_frozen() -> bool:
     """Check if running as a frozen executable."""
-    return getattr(sys, "frozen", False) or getattr(sys, "_MEIPASS", False) or tempfile.gettempdir() in sys.executable
+    return (
+        getattr(sys, "frozen", False)
+        or getattr(sys, "_MEIPASS", False)
+        or tempfile.gettempdir() in sys.executable
+    )
 
 
 def is_running_from_temp() -> bool:
@@ -136,7 +140,9 @@ def load_mod(
     if namespace_path.is_file():
         namespaces = NamespaceReader.from_filepath(namespace_path)
     elif changes_path.is_file():
-        config_reader = ConfigReader.from_filepath(changes_path, tslpatchdata_path=tslpatchdata_path)
+        config_reader = ConfigReader.from_filepath(
+            changes_path, tslpatchdata_path=tslpatchdata_path
+        )
         namespaces = [config_reader.config.as_namespace(changes_path)]
     else:
         raise FileNotFoundError(f"No namespaces.ini or changes.ini found in {tslpatchdata_path}")
@@ -176,7 +182,9 @@ def load_namespace_config(
         raise ValueError(f"Namespace '{selected_namespace_name}' not found in namespaces list")
     changes_ini_path = CaseAwarePath(mod_path, "tslpatchdata", namespace_option.changes_filepath())
     tslpatchdata_path = CaseAwarePath(mod_path, "tslpatchdata")
-    reader: ConfigReader = config_reader or ConfigReader.from_filepath(changes_ini_path, tslpatchdata_path=tslpatchdata_path)
+    reader: ConfigReader = config_reader or ConfigReader.from_filepath(
+        changes_ini_path, tslpatchdata_path=tslpatchdata_path
+    )
     reader.load_settings()
 
     game_number: int | None = reader.config.game_number
@@ -272,7 +280,12 @@ def validate_install_paths(
     -------
         bool: True if paths are valid
     """
-    return bool(mod_path) and CaseAwarePath(mod_path).is_dir() and bool(game_path) and CaseAwarePath(game_path).is_dir()
+    return (
+        bool(mod_path)
+        and CaseAwarePath(mod_path).is_dir()
+        and bool(game_path)
+        and CaseAwarePath(game_path).is_dir()
+    )
 
 
 def parse_args() -> Namespace:
@@ -286,7 +299,6 @@ def parse_args() -> Namespace:
 
     from argparse import ArgumentParser
     from pathlib import Path
-
 
     def _get_invocation_command() -> str:
         """Get the actual command used to invoke the CLI."""
@@ -314,7 +326,9 @@ def parse_args() -> Namespace:
         # Try to make path relative to current directory
         try:
             rel_script = script_path.relative_to(cwd)
-            rel_script_str = str(rel_script).replace("\\", "/")  # Use forward slashes for consistency
+            rel_script_str = str(rel_script).replace(
+                "\\", "/"
+            )  # Use forward slashes for consistency
         except ValueError:
             rel_script_str = str(script_path)
 
@@ -342,10 +356,16 @@ def parse_args() -> Namespace:
     parser.add_argument("--game-dir", type=str, help="Path to game directory")
     parser.add_argument("--tslpatchdata", type=str, help="Path to tslpatchdata")
     parser.add_argument("--namespace-option-index", type=int, help="Namespace option index")
-    parser.add_argument("--console", action="store_true", help="Show the console when launching HoloPatcher.")
+    parser.add_argument(
+        "--console", action="store_true", help="Show the console when launching HoloPatcher."
+    )
     parser.add_argument("--uninstall", action="store_true", help="Uninstalls the selected mod.")
-    parser.add_argument("--install", action="store_true", help="Starts an install immediately on launch.")
-    parser.add_argument("--validate", action="store_true", help="Starts validation of the selected mod.")
+    parser.add_argument(
+        "--install", action="store_true", help="Starts an install immediately on launch."
+    )
+    parser.add_argument(
+        "--validate", action="store_true", help="Starts validation of the selected mod."
+    )
 
     kwargs, positional = parser.parse_known_args()
 
@@ -363,7 +383,10 @@ def parse_args() -> Namespace:
             kwargs.namespace_option_index = int(kwargs.namespace_option_index)
         except ValueError as e:
             print((e.__class__.__name__, str(e)), file=sys.stderr)  # noqa: T201
-            print(f"Invalid namespace_option_index. It should be an integer, got {kwargs.namespace_option_index}", file=sys.stderr)  # noqa: T201
+            print(
+                f"Invalid namespace_option_index. It should be an integer, got {kwargs.namespace_option_index}",
+                file=sys.stderr,
+            )  # noqa: T201
             sys.exit(ExitCode.NAMESPACE_INDEX_OUT_OF_RANGE)
 
     return kwargs
@@ -652,7 +675,9 @@ def write_log_entry(
         if log.log_type.value < log_type_to_level().value:
             return
     except OSError as e:
-        RobustLogger().error(f"Failed to write the log file at '{log_file_path}': {e.__class__.__name__}: {e}")
+        RobustLogger().error(
+            f"Failed to write the log file at '{log_file_path}': {e.__class__.__name__}: {e}"
+        )
 
 
 def format_install_time(install_time: timedelta) -> str:

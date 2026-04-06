@@ -17,11 +17,25 @@ LOCAL_PROGRAM_INFO: dict[str, Any] = {
     "holopatcherDownloadLink": "https://deadlystream.com/files/file/1982-holocron-holopatcher",
     "holopatcherBetaDownloadLink": "https://github.com/OpenKotOR/PyKotor/releases/tag/v1.70-patcher-beta1",
     "holopatcherDirectLinks": {
-        "Darwin": {"32bit": [], "64bit": ["https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Mac.zip"]},
-        "Linux": {"32bit": [], "64bit": ["https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Linux.zip"]},
+        "Darwin": {
+            "32bit": [],
+            "64bit": [
+                "https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Mac.zip"
+            ],
+        },
+        "Linux": {
+            "32bit": [],
+            "64bit": [
+                "https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Linux.zip"
+            ],
+        },
         "Windows": {
-            "32bit": ["https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Windows.zip"],
-            "64bit": ["https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Windows.zip"],
+            "32bit": [
+                "https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Windows.zip"
+            ],
+            "64bit": [
+                "https://github.com/OpenKotOR/PyKotor/releases/download/{tag}/HoloPatcher_Windows.zip"
+            ],
         },
     },
     "holopatcherLatestNotes": "",
@@ -54,21 +68,32 @@ def getRemoteHolopatcherUpdateInfo(
         # with open("config.py") as f:
         #    decoded_content_str = f.read()
         # Use regex to extract the JSON part between the markers
-        json_data_match = re.search(r"<---JSON_START--->\s*\#\s*(.*?)\s*\#\s*<---JSON_END--->", decoded_content_str, flags=re.DOTALL)
+        json_data_match = re.search(
+            r"<---JSON_START--->\s*\#\s*(.*?)\s*\#\s*<---JSON_END--->",
+            decoded_content_str,
+            flags=re.DOTALL,
+        )
 
         if not json_data_match:
             raise ValueError(f"JSON data not found or markers are incorrect: {json_data_match}")  # noqa: TRY301
         json_str = json_data_match[1]
         remote_info = json.loads(json_str)
         if not isinstance(remote_info, dict):
-            raise TypeError(f"Expected remoteInfo to be a dict, instead got type {remote_info.__class__.__name__}")  # noqa: TRY301
+            raise TypeError(
+                f"Expected remoteInfo to be a dict, instead got type {remote_info.__class__.__name__}"
+            )  # noqa: TRY301
     except Exception as e:  # noqa: BLE001
         err_msg = str((e.__class__.__name__, str(e)))
         from tkinter import messagebox
 
         if silent or messagebox.askyesno(
             "Error occurred fetching update information.",
-            ("An error occurred while fetching the latest toolset information.\n\n" + err_msg + "\n\n" + "Would you like to check against the local database instead?"),
+            (
+                "An error occurred while fetching the latest toolset information.\n\n"
+                + err_msg
+                + "\n\n"
+                + "Would you like to check against the local database instead?"
+            ),
         ):
             remote_info = LOCAL_PROGRAM_INFO
         else:

@@ -40,7 +40,10 @@ def execute_cli(cmdline_args: Namespace):
     # Select namespace
     if cmdline_args.namespace_option_index is not None:
         if cmdline_args.namespace_option_index >= len(mod_info.namespaces):
-            print(f"[Error] Namespace index {cmdline_args.namespace_option_index} out of range (max: {len(mod_info.namespaces) - 1})", file=sys.stderr)  # noqa: T201
+            print(
+                f"[Error] Namespace index {cmdline_args.namespace_option_index} out of range (max: {len(mod_info.namespaces) - 1})",
+                file=sys.stderr,
+            )  # noqa: T201
             sys.exit(ExitCode.NAMESPACE_INDEX_OUT_OF_RANGE)
         selected_namespace = mod_info.namespaces[cmdline_args.namespace_option_index].name
     else:
@@ -64,12 +67,20 @@ def execute_cli(cmdline_args: Namespace):
         sys.exit(ExitCode.NUMBER_OF_ARGS)
 
     # Check which operation to perform
-    num_cmdline_actions: int = sum([cmdline_args.install, cmdline_args.uninstall, cmdline_args.validate])
+    num_cmdline_actions: int = sum(
+        [cmdline_args.install, cmdline_args.uninstall, cmdline_args.validate]
+    )
     if num_cmdline_actions > 1:
-        print("[Error] Cannot run more than one of [--install, --uninstall, --validate]", file=sys.stderr)  # noqa: T201
+        print(
+            "[Error] Cannot run more than one of [--install, --uninstall, --validate]",
+            file=sys.stderr,
+        )  # noqa: T201
         sys.exit(ExitCode.NUMBER_OF_ARGS)
     if num_cmdline_actions == 0:
-        print("[Error] Must specify one of [--install, --uninstall, --validate] for CLI mode", file=sys.stderr)  # noqa: T201
+        print(
+            "[Error] Must specify one of [--install, --uninstall, --validate] for CLI mode",
+            file=sys.stderr,
+        )  # noqa: T201
         sys.exit(ExitCode.NUMBER_OF_ARGS)
 
     # Execute the requested operation
@@ -85,7 +96,9 @@ def execute_cli(cmdline_args: Namespace):
                 patcher_logger,
                 should_cancel,
             )
-            print(f"[Info] Install completed: {result.num_errors} errors, {result.num_warnings} warnings, {result.num_patches} patches")  # noqa: T201
+            print(
+                f"[Info] Install completed: {result.num_errors} errors, {result.num_warnings} warnings, {result.num_patches} patches"
+            )  # noqa: T201
             print(f"[Info] Install time: {core.format_install_time(result.install_time)}")  # noqa: T201
 
             if result.num_errors > 0:
@@ -103,7 +116,9 @@ def execute_cli(cmdline_args: Namespace):
 
         elif cmdline_args.validate:
             print("[Info] Validating mod configuration")  # noqa: T201
-            core.validate_config(mod_info.mod_path, mod_info.namespaces, selected_namespace, patcher_logger)
+            core.validate_config(
+                mod_info.mod_path, mod_info.namespaces, selected_namespace, patcher_logger
+            )
             print("[Info] Validation completed successfully")  # noqa: T201
             sys.exit(ExitCode.SUCCESS)
 

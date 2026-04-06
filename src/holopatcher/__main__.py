@@ -11,7 +11,11 @@ from typing import TYPE_CHECKING
 
 
 def is_frozen() -> bool:
-    return getattr(sys, "frozen", False) or getattr(sys, "_MEIPASS", False) or tempfile.gettempdir() in sys.executable
+    return (
+        getattr(sys, "frozen", False)
+        or getattr(sys, "_MEIPASS", False)
+        or tempfile.gettempdir() in sys.executable
+    )
 
 
 if not is_frozen():
@@ -22,11 +26,15 @@ if not is_frozen():
             sys.path.append(working_dir)
 
     with suppress(Exception):
-        pykotor_path = pathlib.Path(__file__).parents[4] / "Libraries" / "PyKotor" / "src" / "pykotor"
+        pykotor_path = (
+            pathlib.Path(__file__).parents[4] / "Libraries" / "PyKotor" / "src" / "pykotor"
+        )
         if pykotor_path.exists():
             update_sys_path(pykotor_path.parent)
     with suppress(Exception):
-        utility_path = pathlib.Path(__file__).parents[4] / "Libraries" / "Utility" / "src" / "utility"
+        utility_path = (
+            pathlib.Path(__file__).parents[4] / "Libraries" / "Utility" / "src" / "utility"
+        )
         if utility_path.exists():
             update_sys_path(utility_path.parent)
     with suppress(Exception):
@@ -74,7 +82,9 @@ def onAppCrash(
                 fake_traceback = None
                 for frame_info in current_stack:
                     frame = frame_info.frame
-                    fake_traceback = TracebackType(fake_traceback, frame, frame.f_lasti, frame.f_lineno)
+                    fake_traceback = TracebackType(
+                        fake_traceback, frame, frame.f_lasti, frame.f_lineno
+                    )
                 exc = exc.with_traceback(fake_traceback)
                 # Now exc has a traceback :)
                 tback = exc.__traceback__
@@ -126,7 +136,9 @@ def main():
             app.root.mainloop()
         except Exception as e:  # noqa: BLE001
             RobustLogger().warning(f"GUI not available: {e}")
-            print("[Warning] Display driver not available, cannot run in GUI mode without command-line arguments.")
+            print(
+                "[Warning] Display driver not available, cannot run in GUI mode without command-line arguments."
+            )
             print("[Info] Use --help to see CLI options")
             sys.exit(ExitCode.SUCCESS)
 

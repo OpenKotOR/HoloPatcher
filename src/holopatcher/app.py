@@ -33,7 +33,11 @@ from typing import TYPE_CHECKING, Any, NoReturn, cast
 
 
 def is_frozen() -> bool:
-    return getattr(sys, "frozen", False) or getattr(sys, "_MEIPASS", False) or tempfile.gettempdir() in sys.executable
+    return (
+        getattr(sys, "frozen", False)
+        or getattr(sys, "_MEIPASS", False)
+        or tempfile.gettempdir() in sys.executable
+    )
 
 
 if not is_frozen():
@@ -44,11 +48,15 @@ if not is_frozen():
             sys.path.append(working_dir)
 
     with suppress(Exception):
-        pykotor_path = pathlib.Path(__file__).parents[4] / "Libraries" / "PyKotor" / "src" / "pykotor"
+        pykotor_path = (
+            pathlib.Path(__file__).parents[4] / "Libraries" / "PyKotor" / "src" / "pykotor"
+        )
         if pykotor_path.exists():
             update_sys_path(pykotor_path.parent)
     with suppress(Exception):
-        utility_path = pathlib.Path(__file__).parents[4] / "Libraries" / "Utility" / "src" / "utility"
+        utility_path = (
+            pathlib.Path(__file__).parents[4] / "Libraries" / "Utility" / "src" / "utility"
+        )
         if utility_path.exists():
             update_sys_path(utility_path.parent)
     with suppress(Exception):
@@ -138,9 +146,13 @@ class App(BaseApp):
                     self.mod_path = mod_info.mod_path
                     self.load_namespace(mod_info.namespaces, mod_info.config_reader)
                 except FileNotFoundError:
-                    self.pykotor_logger.debug("No mod found in current directory or specified path", exc_info=True)
+                    self.pykotor_logger.debug(
+                        "No mod found in current directory or specified path", exc_info=True
+                    )
                 except Exception:  # noqa: BLE001
-                    self.pykotor_logger.exception("An unexpected error occurred while loading the mod from current directory")
+                    self.pykotor_logger.exception(
+                        "An unexpected error occurred while loading the mod from current directory"
+                    )
         self.execute_commandline(cmdline_args)
         self.pykotor_logger.debug("Init complete")
 
@@ -163,9 +175,15 @@ class App(BaseApp):
         # Tools menu
         tools_menu = tk.Menu(self.menu_bar, tearoff=0)
         tools_menu.add_command(label="Validate INI", command=self.test_reader)
-        tools_menu.add_command(label="Uninstall Mod / Restore Backup", command=self.uninstall_selected_mod)
-        tools_menu.add_command(label="Fix permissions to file/folder...", command=self.fix_permissions)
-        tools_menu.add_command(label="Fix iOS Case Sensitivity", command=self.lowercase_files_and_folders)
+        tools_menu.add_command(
+            label="Uninstall Mod / Restore Backup", command=self.uninstall_selected_mod
+        )
+        tools_menu.add_command(
+            label="Fix permissions to file/folder...", command=self.fix_permissions
+        )
+        tools_menu.add_command(
+            label="Fix iOS Case Sensitivity", command=self.lowercase_files_and_folders
+        )
         tools_menu.add_command(label="Create info.rte...", command=self.create_rte_content)
         self.menu_bar.add_cascade(label="Tools", menu=tools_menu)
 
@@ -175,29 +193,53 @@ class App(BaseApp):
 
         # DeadlyStream submenu
         deadlystream_menu = tk.Menu(help_menu, tearoff=0)
-        deadlystream_menu.add_command(label="Discord", command=lambda: webbrowser.open_new("https://discord.gg/nDkHXfc36s"))
-        deadlystream_menu.add_command(label="Website", command=lambda: webbrowser.open_new("https://deadlystream.com"))
+        deadlystream_menu.add_command(
+            label="Discord", command=lambda: webbrowser.open_new("https://discord.gg/nDkHXfc36s")
+        )
+        deadlystream_menu.add_command(
+            label="Website", command=lambda: webbrowser.open_new("https://deadlystream.com")
+        )
         help_menu.add_cascade(label="DeadlyStream", menu=deadlystream_menu)
 
         # Neocities submenu
         neocities_menu = tk.Menu(help_menu, tearoff=0)
-        neocities_menu.add_command(label="Discord", command=lambda: webbrowser.open_new("https://discord.com/invite/kotor"))
-        neocities_menu.add_command(label="Website", command=lambda: webbrowser.open_new("https://kotor.neocities.org"))
+        neocities_menu.add_command(
+            label="Discord", command=lambda: webbrowser.open_new("https://discord.com/invite/kotor")
+        )
+        neocities_menu.add_command(
+            label="Website", command=lambda: webbrowser.open_new("https://kotor.neocities.org")
+        )
         help_menu.add_cascade(label="KOTOR Community Portal", menu=neocities_menu)
 
         # PCGamingWiki submenu
         pcgamingwiki_menu = tk.Menu(help_menu, tearoff=0)
-        pcgamingwiki_menu.add_command(label="KOTOR 1", command=lambda: webbrowser.open_new("https://www.pcgamingwiki.com/wiki/Star_Wars:_Knights_of_the_Old_Republic"))
         pcgamingwiki_menu.add_command(
-            label="KOTOR 2: TSL", command=lambda: webbrowser.open_new("https://www.pcgamingwiki.com/wiki/Star_Wars:_Knights_of_the_Old_Republic_II_-_The_Sith_Lords")
+            label="KOTOR 1",
+            command=lambda: webbrowser.open_new(
+                "https://www.pcgamingwiki.com/wiki/Star_Wars:_Knights_of_the_Old_Republic"
+            ),
+        )
+        pcgamingwiki_menu.add_command(
+            label="KOTOR 2: TSL",
+            command=lambda: webbrowser.open_new(
+                "https://www.pcgamingwiki.com/wiki/Star_Wars:_Knights_of_the_Old_Republic_II_-_The_Sith_Lords"
+            ),
         )
         help_menu.add_cascade(label="PCGamingWiki", menu=pcgamingwiki_menu)
 
         # About menu
         about_menu = tk.Menu(self.menu_bar, tearoff=0)
         about_menu.add_command(label="Check for Updates", command=self.check_for_updates)
-        about_menu.add_command(label="HoloPatcher Home", command=lambda: webbrowser.open_new("https://deadlystream.com/files/file/2243-holopatcher"))
-        about_menu.add_command(label="GitHub Source", command=lambda: webbrowser.open_new("https://github.com/OpenKotOR/PyKotor"))
+        about_menu.add_command(
+            label="HoloPatcher Home",
+            command=lambda: webbrowser.open_new(
+                "https://deadlystream.com/files/file/2243-holopatcher"
+            ),
+        )
+        about_menu.add_command(
+            label="GitHub Source",
+            command=lambda: webbrowser.open_new("https://github.com/OpenKotOR/PyKotor"),
+        )
         self.menu_bar.add_cascade(label="About", menu=about_menu)
 
     def initialize_ui_controls(self):
@@ -242,7 +284,9 @@ class App(BaseApp):
         self.gamepaths = ttk.Combobox(top_frame, style="TCombobox")
         self.gamepaths.set("Select your KOTOR directory path")
         self.gamepaths.grid(row=1, column=0, padx=5, pady=2, sticky="ew")
-        self.gamepaths["values"] = [str(path) for game in find_kotor_paths_from_default().values() for path in game]
+        self.gamepaths["values"] = [
+            str(path) for game in find_kotor_paths_from_default().values() for path in game
+        ]
         self.gamepaths.bind("<<ComboboxSelected>>", self.on_gamepaths_chosen)
         # Browse for a KOTOR path
         self.gamepaths_browse_button = ttk.Button(top_frame, text="Browse", command=self.open_kotor)
@@ -373,14 +417,18 @@ class App(BaseApp):
         os_name = platform.system()
         links: list[str] = []
 
-        is_release = True  # TODO(th3w1zard1): remove this line when the beta version direct links are ready.
+        is_release = (
+            True  # TODO(th3w1zard1): remove this line when the beta version direct links are ready.
+        )
         if is_release:
             links = remote_info["holopatcherDirectLinks"][os_name][proc_arch.value]
         else:
             links = remote_info["holopatcherBetaDirectLinks"][os_name][proc_arch.value]
 
         progress_queue: Queue = Queue()
-        progress_dialog: Process = run_tk_progress_dialog(progress_queue, "HoloPatcher is updating and will restart shortly...")
+        progress_dialog: Process = run_tk_progress_dialog(
+            progress_queue, "HoloPatcher is updating and will restart shortly..."
+        )
 
         def download_progress_hook(data: dict[str, Any], progress_queue: Queue = progress_queue):
             progress_queue.put(data)
@@ -420,7 +468,9 @@ class App(BaseApp):
         try:
             progress_queue.put({"action": "update_status", "text": "Downloading update..."})
             updater.download(background=False)
-            progress_queue.put({"action": "update_status", "text": "Restarting and Applying update..."})
+            progress_queue.put(
+                {"action": "update_status", "text": "Restarting and Applying update..."}
+            )
             updater.extract_restart()
             progress_queue.put({"action": "update_status", "text": "Cleaning up..."})
             updater.cleanup()
@@ -451,15 +501,22 @@ class App(BaseApp):
         if cmdline_args.game_dir:
             self.open_kotor(cmdline_args.game_dir)
         if cmdline_args.namespace_option_index:
-            self.namespaces_combobox.set(self.namespaces_combobox["values"][cmdline_args.namespace_option_index])
+            self.namespaces_combobox.set(
+                self.namespaces_combobox["values"][cmdline_args.namespace_option_index]
+            )
         if not cmdline_args.console:
             self.hide_console()
 
-        num_cmdline_actions: int = sum([cmdline_args.install, cmdline_args.uninstall, cmdline_args.validate])
+        num_cmdline_actions: int = sum(
+            [cmdline_args.install, cmdline_args.uninstall, cmdline_args.validate]
+        )
         if num_cmdline_actions == 1:
             self._begin_oneshot(cmdline_args)
         elif num_cmdline_actions > 1:
-            messagebox.showerror("Invalid cmdline args passed", "Cannot run more than one of [--install, --uninstall, --validate]")
+            messagebox.showerror(
+                "Invalid cmdline args passed",
+                "Cannot run more than one of [--install, --uninstall, --validate]",
+            )
             sys.exit(ExitCode.NUMBER_OF_ARGS)
 
     def _begin_oneshot(
@@ -555,7 +612,9 @@ class App(BaseApp):
         self.clear_main_text()
         fully_ran: bool = True
         try:
-            uninstaller = ModUninstaller(backup_parent_folder, Path(self.gamepaths.get()), self.logger)
+            uninstaller = ModUninstaller(
+                backup_parent_folder, Path(self.gamepaths.get()), self.logger
+            )
             fully_ran = uninstaller.uninstall_selected_mod()
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
             self._handle_exception_during_install(e)
@@ -570,7 +629,9 @@ class App(BaseApp):
         if not inspect.isclass(exctype):
             msg = "Only types can be raised (not instances)"
             raise TypeError(msg)
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(tid), ctypes.py_object(exctype))
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+            ctypes.c_long(tid), ctypes.py_object(exctype)
+        )
         if res == 0:
             msg = "invalid thread id"
             raise ValueError(msg)
@@ -618,14 +679,20 @@ class App(BaseApp):
                 self.task_thread._stop()  # type: ignore[attr-defined]  # pylint: disable=protected-access  # noqa: SLF001
                 print("force terminate of install thread succeeded")
             except BaseException as e:  # pylint: disable=W0718  # noqa: BLE001
-                self._handle_general_exception(e, "Error using self.install_thread._stop()", msgbox=False)
+                self._handle_general_exception(
+                    e, "Error using self.install_thread._stop()", msgbox=False
+                )
             try:
                 if self.task_thread.ident is None:
                     msg = "task ident is None, expected an int."
                     raise ValueError(msg)  # noqa: TRY301
                 self.async_raise(self.task_thread.ident, SystemExit)
             except BaseException as e:  # pylint: disable=W0718  # noqa: BLE001
-                self._handle_general_exception(e, "Error using async_raise(self.install_thread.ident, SystemExit)", msgbox=False)
+                self._handle_general_exception(
+                    e,
+                    "Error using async_raise(self.install_thread.ident, SystemExit)",
+                    msgbox=False,
+                )
             print(f"Install thread is still alive after {i} seconds, waiting...")
             time.sleep(1)
             i += 1
@@ -642,7 +709,9 @@ class App(BaseApp):
         try:
             if os.name == "nt":
                 system32_path = win_get_system32_dir()
-                subprocess.run([str(system32_path / "taskkill.exe"), "/F", "/PID", str(pid)], check=True)  # noqa: S603
+                subprocess.run(
+                    [str(system32_path / "taskkill.exe"), "/F", "/PID", str(pid)], check=True
+                )  # noqa: S603
             else:
                 subprocess.run(["/bin/kill", "-9", str(pid)], check=True)  # noqa: S603
         except Exception as e:  # noqa: BLE001
@@ -687,7 +756,9 @@ class App(BaseApp):
                             str_file_path = str(file_path)
                             str_new_file_path = str(new_file_path)
                             if str_file_path != str_new_file_path:
-                                self.logger.add_note(f"Renaming {str_file_path} to '{new_file_path.name}'")
+                                self.logger.add_note(
+                                    f"Renaming {str_file_path} to '{new_file_path.name}'"
+                                )
                                 file_path.rename(new_file_path)
                                 made_change = True
 
@@ -698,7 +769,9 @@ class App(BaseApp):
                             str_dir_path = str(dir_path)
                             str_new_dir_path = str(new_dir_path)
                             if str_dir_path != str_new_dir_path:
-                                self.logger.add_note(f"Renaming {str_dir_path} to '{new_dir_path.name}'")
+                                self.logger.add_note(
+                                    f"Renaming {str_dir_path} to '{new_dir_path.name}'"
+                                )
                                 dir_path.rename(str_new_dir_path)
                                 made_change = True
                     Path(directory).rename(str(directory).lower())
@@ -707,7 +780,9 @@ class App(BaseApp):
                 finally:
                     self.set_state(state=False)
                     if not made_change:
-                        self.logger.add_note("Nothing to change - all files/folders already correct case.")
+                        self.logger.add_note(
+                            "Nothing to change - all files/folders already correct case."
+                        )
                     self.logger.add_note("iOS case rename task completed.")
 
             self.task_thread = Thread(target=task, name="lowercase_tool_task")
@@ -740,10 +815,16 @@ class App(BaseApp):
         """
         try:
             # Load the settings from the ini changes file.
-            namespace_option: PatcherNamespace = next(x for x in self.namespaces if x.name == self.namespaces_combobox.get())
-            changes_ini_path = CaseAwarePath(self.mod_path, "tslpatchdata", namespace_option.changes_filepath())
+            namespace_option: PatcherNamespace = next(
+                x for x in self.namespaces if x.name == self.namespaces_combobox.get()
+            )
+            changes_ini_path = CaseAwarePath(
+                self.mod_path, "tslpatchdata", namespace_option.changes_filepath()
+            )
             tslpatchdata_path = CaseAwarePath(self.mod_path, "tslpatchdata")
-            reader: ConfigReader = config_reader or ConfigReader.from_filepath(changes_ini_path, tslpatchdata_path=tslpatchdata_path)
+            reader: ConfigReader = config_reader or ConfigReader.from_filepath(
+                changes_ini_path, tslpatchdata_path=tslpatchdata_path
+            )
             reader.load_settings()
             self.log_level = reader.config.log_level
 
@@ -751,13 +832,24 @@ class App(BaseApp):
             game_number: int | None = reader.config.game_number
             if game_number:
                 game = Game(game_number)
-                self.gamepaths["values"] = [str(path) for game_key in ([game] + ([Game.K1] if game == Game.K2 else [])) for path in find_kotor_paths_from_default()[game_key]]
+                self.gamepaths["values"] = [
+                    str(path)
+                    for game_key in ([game] + ([Game.K1] if game == Game.K2 else []))
+                    for path in find_kotor_paths_from_default()[game_key]
+                ]
 
             # Strip info.rtf and display in the main window frame.
-            info_rtf_path = CaseAwarePath(self.mod_path, "tslpatchdata", namespace_option.rtf_filepath())
-            info_rte_path = CaseAwarePath(self.mod_path, "tslpatchdata", namespace_option.rtf_filepath()).with_suffix(".rte")
+            info_rtf_path = CaseAwarePath(
+                self.mod_path, "tslpatchdata", namespace_option.rtf_filepath()
+            )
+            info_rte_path = CaseAwarePath(
+                self.mod_path, "tslpatchdata", namespace_option.rtf_filepath()
+            ).with_suffix(".rte")
             if not info_rtf_path.is_file() and not info_rte_path.is_file():
-                messagebox.showwarning("No info.rtf", f"Could not load the info rtf for this mod, file '{info_rtf_path}' not found on disk.")
+                messagebox.showwarning(
+                    "No info.rtf",
+                    f"Could not load the info rtf for this mod, file '{info_rtf_path}' not found on disk.",
+                )
                 return
 
             if info_rte_path.is_file():
@@ -770,7 +862,9 @@ class App(BaseApp):
                 self.set_stripped_rtf_text(rtf_text)
                 # self.load_rtf_file(info_rtf_path)
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-            self._handle_general_exception(e, "An unexpected error occurred while loading the patcher namespace.")
+            self._handle_general_exception(
+                e, "An unexpected error occurred while loading the patcher namespace."
+            )
         else:
             self.root.after(10, lambda: self.move_cursor_to_end(self.namespaces_combobox))
 
@@ -828,7 +922,10 @@ class App(BaseApp):
 
             tslpatchdata_path = CaseAwarePath(directory_path_str, "tslpatchdata")
             # handle when a user selects 'tslpatchdata' instead of mod root
-            if not tslpatchdata_path.is_dir() and tslpatchdata_path.parent.name.lower() == "tslpatchdata":
+            if (
+                not tslpatchdata_path.is_dir()
+                and tslpatchdata_path.parent.name.lower() == "tslpatchdata"
+            ):
                 tslpatchdata_path = tslpatchdata_path.parent
 
             self.mod_path = str(tslpatchdata_path.parent)
@@ -838,17 +935,25 @@ class App(BaseApp):
             if namespace_path.is_file():
                 self.load_namespace(NamespaceReader.from_filepath(namespace_path))
             elif changes_path.is_file():
-                config_reader: ConfigReader = ConfigReader.from_filepath(changes_path, tslpatchdata_path=tslpatchdata_path)
-                namespaces: list[PatcherNamespace] = [config_reader.config.as_namespace(changes_path)]
+                config_reader: ConfigReader = ConfigReader.from_filepath(
+                    changes_path, tslpatchdata_path=tslpatchdata_path
+                )
+                namespaces: list[PatcherNamespace] = [
+                    config_reader.config.as_namespace(changes_path)
+                ]
                 self.load_namespace(namespaces, config_reader)
             else:
                 self.mod_path = ""
                 if not default_directory_path_str:  # don't show the error if the cwd was attempted
-                    messagebox.showerror("Error", "Could not find a mod located at the given folder.")
+                    messagebox.showerror(
+                        "Error", "Could not find a mod located at the given folder."
+                    )
                 return
             self.check_access(tslpatchdata_path, recurse=True, should_filter=True)
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-            self._handle_general_exception(e, "An unexpected error occurred while loading the mod info.")
+            self._handle_general_exception(
+                e, "An unexpected error occurred while loading the mod info."
+            )
         else:
             if default_directory_path_str:
                 self.browse_button.place_forget()
@@ -873,7 +978,9 @@ class App(BaseApp):
             - Move cursor after a delay to end of dropdown
         """
         try:
-            directory_path_str: os.PathLike | str = default_kotor_dir_str or filedialog.askdirectory()
+            directory_path_str: os.PathLike | str = (
+                default_kotor_dir_str or filedialog.askdirectory()
+            )
             if not directory_path_str:
                 return
             directory = CaseAwarePath(directory_path_str)
@@ -884,7 +991,9 @@ class App(BaseApp):
                 self.gamepaths["values"] = (*self.gamepaths["values"], directory_str)
             self.root.after(10, self.move_cursor_to_end, self.namespaces_combobox)
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-            self._handle_general_exception(e, "An unexpected error occurred while loading the game directory.")
+            self._handle_general_exception(
+                e, "An unexpected error occurred while loading the game directory."
+            )
 
     @staticmethod
     def play_complete_sound():
@@ -911,7 +1020,9 @@ class App(BaseApp):
         path_arg = filedialog.askdirectory() if directory is None else directory
         if not path_arg:
             return
-        if not directory and not messagebox.askyesno("Warning!", "This is not a toy. Really continue?"):
+        if not directory and not messagebox.askyesno(
+            "Warning!", "This is not a toy. Really continue?"
+        ):
             return
 
         try:
@@ -923,11 +1034,16 @@ class App(BaseApp):
                 self.clear_main_text()
                 self.logger.add_note("Please wait, this may take awhile...")
                 try:
-                    access: tuple[bool, int, int] = core.gain_directory_access(str(path), self.logger)
+                    access: tuple[bool, int, int] = core.gain_directory_access(
+                        str(path), self.logger
+                    )
                     # self.play_complete_sound()
                     if not access[0]:
                         if not directory:
-                            messagebox.showerror("Could not acquire permission!", "Permissions denied! Check the logs for more details.")
+                            messagebox.showerror(
+                                "Could not acquire permission!",
+                                "Permissions denied! Check the logs for more details.",
+                            )
                         else:
                             messagebox.showerror(
                                 "Could not gain permission!",
@@ -945,9 +1061,14 @@ class App(BaseApp):
                                 num_folders += 1
 
                     if check_isdir:
-                        extra_msg = f"{num_files} files and {num_folders} folders finished processing."
+                        extra_msg = (
+                            f"{num_files} files and {num_folders} folders finished processing."
+                        )
                         self.logger.add_note(extra_msg)
-                    messagebox.showinfo("Successfully acquired permission", f"The operation was successful. {extra_msg}")
+                    messagebox.showinfo(
+                        "Successfully acquired permission",
+                        f"The operation was successful. {extra_msg}",
+                    )
 
                 except Exception as e:
                     self._handle_general_exception(e)
@@ -1083,10 +1204,17 @@ class App(BaseApp):
             if not self.preinstall_validate_chosen():
                 return
             self.pykotor_logger.debug("Prevalidate finished, starting install thread")
-            self.task_thread = Thread(target=self.begin_install_thread, args=(self.simple_thread_event, self.update_progress_bar_directly), name="HoloPatcher_install_thread")
+            self.task_thread = Thread(
+                target=self.begin_install_thread,
+                args=(self.simple_thread_event, self.update_progress_bar_directly),
+                name="HoloPatcher_install_thread",
+            )
             self.task_thread.start()
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-            self._handle_general_exception(e, "An unexpected error occurred during the installation and the program was forced to exit")
+            self._handle_general_exception(
+                e,
+                "An unexpected error occurred during the installation and the program was forced to exit",
+            )
             sys.exit(ExitCode.EXCEPTION_DURING_INSTALL)
 
     def begin_install_thread(
@@ -1111,7 +1239,9 @@ class App(BaseApp):
             - Finally set the install status to not running.
         """
         self.pykotor_logger.debug("begin_install_thread reached")
-        namespace_option: PatcherNamespace = next(x for x in self.namespaces if x.name == self.namespaces_combobox.get())
+        namespace_option: PatcherNamespace = next(
+            x for x in self.namespaces if x.name == self.namespaces_combobox.get()
+        )
         tslpatchdata_path = CaseAwarePath(self.mod_path, "tslpatchdata")
         ini_file_path = tslpatchdata_path.joinpath(namespace_option.changes_filepath())
         namespace_mod_path: CaseAwarePath = ini_file_path.parent
@@ -1126,7 +1256,9 @@ class App(BaseApp):
         self.main_text.see(tk.END)
         self.main_text.config(state=tk.DISABLED)
         try:
-            installer = ModInstaller(namespace_mod_path, self.gamepaths.get(), ini_file_path, self.logger)
+            installer = ModInstaller(
+                namespace_mod_path, self.gamepaths.get(), ini_file_path, self.logger
+            )
             installer.tslpatchdata_path = tslpatchdata_path
             self._execute_mod_install(installer, should_cancel_thread, update_progress_func)
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
@@ -1138,8 +1270,12 @@ class App(BaseApp):
     def test_reader(self):  # sourcery skip: no-conditionals-in-tests
         if not self.preinstall_validate_chosen():
             return
-        namespace_option: PatcherNamespace = next(x for x in self.namespaces if x.name == self.namespaces_combobox.get())
-        ini_file_path = CaseAwarePath(self.mod_path, "tslpatchdata", namespace_option.changes_filepath())
+        namespace_option: PatcherNamespace = next(
+            x for x in self.namespaces if x.name == self.namespaces_combobox.get()
+        )
+        ini_file_path = CaseAwarePath(
+            self.mod_path, "tslpatchdata", namespace_option.changes_filepath()
+        )
         tslpatchdata_path = CaseAwarePath(self.mod_path, "tslpatchdata")
 
         self.set_state(state=True)
@@ -1147,10 +1283,14 @@ class App(BaseApp):
 
         def task():
             try:
-                reader = ConfigReader.from_filepath(ini_file_path, self.logger, tslpatchdata_path=tslpatchdata_path)
+                reader = ConfigReader.from_filepath(
+                    ini_file_path, self.logger, tslpatchdata_path=tslpatchdata_path
+                )
                 reader.load(reader.config)
             except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-                self._handle_general_exception(e, "An unexpected error occurred while testing the config ini reader")
+                self._handle_general_exception(
+                    e, "An unexpected error occurred while testing the config ini reader"
+                )
             finally:
                 self.set_state(state=False)
                 self.logger.add_note("Config reader test is complete.")
@@ -1191,7 +1331,12 @@ class App(BaseApp):
             self.gamepaths_browse_button.config(state=tk.NORMAL)
             self.browse_button.config(state=tk.NORMAL)
 
-    def _execute_mod_install(self, installer: ModInstaller, should_cancel_thread: Event, progress_update_func: Callable | None = None):
+    def _execute_mod_install(
+        self,
+        installer: ModInstaller,
+        should_cancel_thread: Event,
+        progress_update_func: Callable | None = None,
+    ):
         """Executes the mod installation.
 
         Args:
@@ -1238,7 +1383,9 @@ class App(BaseApp):
             # profiler.enable()
             install_start_time: datetime = datetime.now(timezone.utc).astimezone()
             installer.install(should_cancel_thread, progress_update_func)
-            total_install_time: timedelta = datetime.now(timezone.utc).astimezone() - install_start_time
+            total_install_time: timedelta = (
+                datetime.now(timezone.utc).astimezone() - install_start_time
+            )
             if progress_update_func is not None:
                 assert self.progress_value is not None, "Progress value is None"
                 self.progress_value.set(99)
@@ -1296,7 +1443,9 @@ class App(BaseApp):
                 if self.one_shot:
                     sys.exit(ExitCode.SUCCESS)
         except Exception as e:  # pylint: disable=W0718  # noqa: BLE001
-            self._handle_general_exception(e, "An unexpected error occurred while testing the config ini reader")
+            self._handle_general_exception(
+                e, "An unexpected error occurred while testing the config ini reader"
+            )
         finally:
             self.set_state(state=False)
             self.logger.add_note("Config reader test is complete.")
@@ -1329,7 +1478,9 @@ class App(BaseApp):
         """
         self.pykotor_logger.exception("Unhandled exception in HoloPatcher", exc_info=e)
         error_name, msg = e.__class__.__name__, str(e)
-        self.logger.add_error(f"{error_name}: {msg}{os.linesep}The installation was aborted with errors")
+        self.logger.add_error(
+            f"{error_name}: {msg}{os.linesep}The installation was aborted with errors"
+        )
         messagebox.showerror(
             error_name,
             f"An unexpected error occurred during the installation and the installation was forced to terminate.{os.linesep * 2}{msg}",
@@ -1441,7 +1592,9 @@ class App(BaseApp):
             if log.log_type.value < log_type_to_level().value:
                 return
         except OSError as e:
-            RobustLogger().error(f"Failed to write the log file at '{self.log_file_path}': {e.__class__.__name__}: {e}")
+            RobustLogger().error(
+                f"Failed to write the log file at '{self.log_file_path}': {e.__class__.__name__}: {e}"
+            )
 
         if self.main_text is None:
             return
