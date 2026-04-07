@@ -64,7 +64,11 @@ if not is_frozen():
 
 
 from holopatcher import core  # noqa: E402
-from holopatcher.config import CURRENT_VERSION, getRemoteHolopatcherUpdateInfo, remoteVersionNewer  # noqa: E402
+from holopatcher.config import (  # noqa: E402
+    CURRENT_VERSION,
+    getRemoteHolopatcherUpdateInfo,
+    remoteVersionNewer,
+)
 from loggerplus import RobustLogger  # noqa: E402
 from pykotor.common.misc import Game  # noqa: E402
 from pykotor.common.stream import BinaryReader  # noqa: E402
@@ -1526,8 +1530,12 @@ class App(BaseApp):
     def load_rtf_file(self, file_path: os.PathLike | str):
         if self.main_text is None:
             return
-        from utility.pyth3.plugins.plaintext.writer import PlaintextWriter  # pyright: ignore[reportMissingImports]
-        from utility.pyth3.plugins.rtf15.reader import Rtf15Reader  # pyright: ignore[reportMissingImports]
+        from utility.pyth3.plugins.plaintext.writer import (
+            PlaintextWriter,  # pyright: ignore[reportMissingImports]
+        )
+        from utility.pyth3.plugins.rtf15.reader import (
+            Rtf15Reader,  # pyright: ignore[reportMissingImports]
+        )
 
         with Path(file_path).open("rb") as file:
             rtf_contents_as_utf8_encoded: bytes = decode_bytes_with_fallbacks(file.read()).encode()
