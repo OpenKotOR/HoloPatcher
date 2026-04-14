@@ -154,3 +154,4 @@ vendor/KotOR.js/vendor/PyKotor/
 
 src/holopatcher.egg-info/
 src/holopatcher/__pycache__/
+src/holopatcher.egg-info/entry_points.txt
