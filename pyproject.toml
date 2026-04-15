@@ -117,8 +117,6 @@ exclude-modules = [
   "matplotlib",
   "PyOpenGL",
   "PyGLM",
-  "dl_translate",
-  "torch",
 ]
 
 [tool.dependencies]
