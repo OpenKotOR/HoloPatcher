@@ -1470,7 +1470,7 @@ class App(BaseApp):
         raise  # noqa: PLE0704
 
     def create_rte_content(self, event: tk.Tk | None = None):
-        from utility.gui.tkinter.rte_editor import main as start_rte_editor
+        from holopatcher.rte_editor import main as start_rte_editor
 
         start_rte_editor()
 
